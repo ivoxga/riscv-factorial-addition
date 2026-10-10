@@ -1,0 +1,94 @@
+.data
+    msg_in:   .asciz "Digite um número inteiro: "
+    msg_out1: .asciz "O fatorial de "
+    msg_out2: .asciz " = "
+
+.text
+.global _start
+
+# main()
+_start:
+	# Prólogo
+	andi sp, sp, -16        # Assegura alinhamento de 16 bytes
+	addi sp, sp, -16        # Reserva 16 bytes na stack
+	sw ra, 12(sp)           # Salva o endereço de retorno
+	sw s0, 8(sp)            # Salva o frame pointer
+	mv s0, sp               # Atualiza o frame pointer
+
+	# Imprime a mensagem "Digite um número inteiro: "
+	la a0, msg_in           # Carrega o endereço de "msg_in" para a0
+	li a7, 4                # Syscall para imprimir "msg_in"
+	ecall                   # Chamada ao sistema
+
+	# Lê o número inserido
+	li a7, 5                # Syscall para ler nº inserido
+	ecall
+	sw a0, 0(sp)            # Armazena o nº inserido lido na stack
+
+	# Chama a função para cálcular fatorial
+	jal fatorial            # Chama a função fatorial
+	sw a0, 4(sp)            # Armazena o resultado do fatorial na stack
+	
+	# Imprime "O fatorial de "
+	la a0, msg_out1         # Load address "O fatorial de " para a0
+	li a7, 4
+	ecall                   
+
+	# Imprime o número inserido
+	lw a0, 0(sp)            # Load word -> nº inserido
+	li a7, 1                # Syscall para imprimir nº inserido
+	ecall
+
+	# Imprime " = "
+	la a0, msg_out2         # Carrega a mensagem " = " em a0
+	li a7, 4
+	ecall
+
+	# Imprime o resultado do fatorial
+	lw a0, 4(sp)            # Load word -> resultado (nº inserido)!
+	li a7, 1
+	ecall
+
+	# Epílogo
+	addi sp, sp, 16         # Liberta os 32 bytes reservados
+	lw ra, 12(sp)           # Restaura o endereço de retorno
+	lw s0, 8(sp)            # Restaura o fp
+	li a7, 10               # Syscall para finalizar o programa
+	ecall
+
+# fatorial()
+fatorial:
+	# Prólogo
+	addi sp, sp, -16        # Reserva 16 bytes na stack
+	sw ra, 12(sp)           # Salva o endereço de retorno
+	sw s0, 8(sp)            # Salva o frame pointer
+	mv s0, sp               # Atualiza o fp
+
+	li t1, 1                # Resultado = 1
+	mv t0, a0               # t0 = nº inserido (argumento)
+
+# for()
+fatorial_loop:
+	beq t0, x0, fatorial_fim # Se t0 == 0, termina o loop
+
+	li t2, 0                # Contador t2 = 0 // i
+	li t3, 0                # Acumulador t3 = 0
+
+somas_loop:
+	add t3, t3, t1          # Acumula resultado (t3 = t3 + t1)
+	addi t2, t2, 1          # t2++ // i++
+	bne t2, t0, somas_loop  # Continua até t2 == t0
+
+	mv t1, t3               # Atualiza t1 com o resultado acumulado
+	addi t0, t0, -1         # nº inserido - 1
+	j fatorial_loop         # Repete o "for"
+
+# return (resultado)
+fatorial_fim:
+	mv a0, t1               # Passa resultado para a0
+	
+	#Epílogo
+	lw ra, 12(sp)           # Restaura o endereço de retorno
+	lw s0, 8(sp)            # Restaura o frame pointer
+	addi sp, sp, 16         # Desaloca a pilha
+	jr ra                   # Retorna para o "_start" //  "main()"

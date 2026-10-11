@@ -5,7 +5,7 @@ A RISC-V (RV32I) assembly program that reads an integer from the keyboard and co
 > Project developed for the course **Computer Systems Architecture**, BSc in **Electrical and Computer Engineering**, **Instituto Politécnico do Cávado e Ave (IPCA)**, **2nd year**.
 
 The assignment was to translate the following C program to RV32I assembly:
-
+ 
 ```c
 #include <stdio.h>
 

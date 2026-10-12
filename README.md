@@ -7,7 +7,7 @@ A RISC-V (RV32I) assembly program that reads an integer from the keyboard and co
 The assignment was to translate the following C program to RV32I assembly:
  
 ```c
-#include <stdio.h>
+#include <stdio.h> 
 
 int fatorial(int n);
 

@@ -1,8 +1,6 @@
 # Factorial in RISC-V Assembly (RV32I) Using Only Additions
 
 A RISC-V (RV32I) assembly program that reads an integer from the keyboard and computes its factorial **using only additions**: every multiplication is replaced by repeated addition. The program follows the standard function-call conventions (prologue/epilogue, stack frames aligned to 16 bytes, argument and return value in `a0`).
-
-> Project developed for the course **Computer Systems Architecture**, BSc in **Electrical and Computer Engineering**, **Instituto Politécnico do Cávado e Ave (IPCA)**, **2nd year**.
  
 The assignment was to translate the following C program to RV32I assembly:
  
@@ -28,6 +26,8 @@ int fatorial(int n) {
     return resultado;
 }
 ```
+
+> Project developed for the course **Computer Systems Architecture**, BSc in **Electrical and Computer Engineering**, **Instituto Politécnico do Cávado e Ave (IPCA)**, **2nd year**.
 
 ---
 
